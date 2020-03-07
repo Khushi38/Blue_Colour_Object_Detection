@@ -1,0 +1,37 @@
+import numpy as np
+import cv2
+img=cv2.imread(r'C:\Users\Welcome\Desktop\tub5.jpeg')
+
+dimensions = img.shape
+#height = img.shape[0]
+#width = img.shape[1]
+scale_percent = 40 # percent of original size
+width = int(img.shape[1] * scale_percent / 100)
+height = int(img.shape[0] * scale_percent / 100)
+dim = (width, height)
+area=width*height
+img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+# im = np.zeros((img.shape[0],img.shape[1]),dtype = int)
+# im = 0.6*img[:,:,0] + 0.2*img[:,:,1] + 0.2*img[:,:,2]
+
+# im = cv2.normalize(im.astype(int), None, 255,0, cv2.NORM_MINMAX, cv2.CV_8UC1)
+# im=cv2.cvtColor(im,cv2.COLOR_GRAY2BGR)
+#img=cv2.GaussianBlur(frame, (5,5), 0)
+img=cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+blue_lower=np.array([100,150,0],np.uint8)
+
+blue_upper=np.array([140,255,255],np.uint8)
+blue=cv2.inRange(img,blue_lower,blue_upper)
+white=cv2.countNonZero(blue)
+black=area-cv2.countNonZero(blue)
+
+print(white)
+print(black)
+total=blue.size
+print(blue.size)
+if(white>=0.60*total):
+    print("good")
+cv2.imshow('frame',blue)
+cv2.waitKey(0) 
+cv2.destroyAllWindows()
