@@ -1,0 +1,47 @@
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+while(True):
+#cap = cv2.VideoCapture(r'C:\Users\Welcome\Desktop\tub.mp4')
+
+#while(cap.isOpened()):
+
+
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+#     height = frame.shape[0]
+#     width = frame.shape[1]
+#     area=width*height
+
+    if ret == True:
+        img=cv2.GaussianBlur(frame, (5,5), 0)
+        img=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        blue_lower=np.array([100,150,0],np.uint8)
+        blue_upper=np.array([140,255,255],np.uint8)
+        blue=cv2.inRange(img,blue_lower,blue_upper)
+        white=cv2.countNonZero(blue)
+        #black=area-cv2.countNonZero(blue)
+
+        print(white)
+        #print(black)
+        total=blue.size
+        print(blue.size)
+        if(white>=0.3*total):
+#225280
+            print("good")
+#         else:
+#             continue
+
+
+        
+        cv2.imshow('frame',blue)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    else:
+        break
+
+# When everything done, release the capture
+#cap.release()
+cv2.destroyAllWindows()
